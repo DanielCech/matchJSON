@@ -3,11 +3,11 @@ matchJSON
 
 OS X commandline tool for structure comparison of two JSON files
 
-Usage:
+#### Usage:
 
     $ ./matchJSON <parameters> <file1.json> <file2.json>
     
-Parameters:
+#### Parameters:
 
 | Parameter | Meaning |
 | --- | --- |
