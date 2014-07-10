@@ -39,3 +39,5 @@ Demo [file1.json](https://dl.dropboxusercontent.com/u/57198916/JSON/file1.json),
 #### Binary
 
 You can download binary [here](https://dl.dropboxusercontent.com/u/57198916/JSON/matchJSON).
+
+Known limitation: matchJSON cannot distinguish between number and bool value in JSON.
