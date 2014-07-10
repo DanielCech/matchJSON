@@ -19,7 +19,7 @@ OS X commandline tool for structure comparison of two JSON files
 
 #### Example:
 
-    ./matchJSON -a -n /Users/dan/Dropbox/Public/JSON/file1.json /Users/dan/Dropbox/Public/JSON/file2.json
+    $ ./matchJSON -a -n /Users/dan/Dropbox/Public/JSON/file1.json /Users/dan/Dropbox/Public/JSON/file2.json
     
     [<] prices/0/parts/0/cards/0/cardNumber: missing key
     [!] prices/0/parts/0/cards/1/cardStatus: type mismatch - [<]: __NSCFString, [>]: __NSCFNumber
