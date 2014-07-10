@@ -1,7 +1,7 @@
 matchJSON
 =========
 
-OS X commandline tool for structure comparison of JSON files. Compares two JSONs and shows differences regardless string/number values. It can be used for testing if API JSON response matches API specification.
+OS X command line tool for structure comparison of JSON files. Compares two JSONs and shows differences regardless string/number values. It can be used for testing if API JSON response matches API specification.
 
 #### Usage
 
