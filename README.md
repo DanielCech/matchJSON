@@ -1,13 +1,13 @@
 matchJSON
 =========
 
-OS X commandline tool for structure comparison of two JSON files
+OS X commandline tool for structure comparison of JSON files. Compares two JSONs and shows differences regardless string/number values.
 
-#### Usage:
+#### Usage
 
     $ ./matchJSON <parameters> <file1.json> <file2.json>
     
-#### Parameters:
+#### Parameters
 
 | Parameter | Meaning |
 | --- | --- |
@@ -17,7 +17,7 @@ OS X commandline tool for structure comparison of two JSON files
 | -f | compare just first items of arrays                |
 | -m | compare array items mutually (not working, under construction) |
 
-#### Example:
+#### Example
 
     $ ./matchJSON -a -n /Users/dan/Dropbox/Public/JSON/file1.json /Users/dan/Dropbox/Public/JSON/file2.json
     
