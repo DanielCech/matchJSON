@@ -15,7 +15,7 @@ OS X commandline tool for structure comparison of two JSON files
 | -a | allow empty array on one side                     |
 | -d | allow empty dictionary on one side                |
 | -f | compare just first items of arrays                |
-| -m | compare array items mutually (under construction) |
+| -m | compare array items mutually (not working, under construction) |
 
 #### Example:
 
