@@ -29,7 +29,7 @@ OS X commandline tool for structure comparison of two JSON files
     [>] prices/0/parts/0/cards/2/avatarURL: missing key
     [!] prices/0/priceId: type mismatch - [<]: __NSCFNumber, [>]: __NSCFConstantString
     
-    Demo [file1.json](https://dl.dropboxusercontent.com/u/57198916/JSON/file1.json), [file2.json](https://dl.dropboxusercontent.com/u/57198916/JSON/file2.json)
+Demo [file1.json](https://dl.dropboxusercontent.com/u/57198916/JSON/file1.json), [file2.json](https://dl.dropboxusercontent.com/u/57198916/JSON/file2.json)
 
 #### Legend
 
@@ -38,4 +38,4 @@ OS X commandline tool for structure comparison of two JSON files
 
 #### Binary
 
-    You can download binary [here](https://dl.dropboxusercontent.com/u/57198916/JSON/matchJSON).
+You can download binary [here](https://dl.dropboxusercontent.com/u/57198916/JSON/matchJSON).
