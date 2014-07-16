@@ -12,13 +12,43 @@
 BOOL allowEmptyArrayOnOneSide = NO;
 BOOL allowEmptyDictionaryOnOneSide = NO;
 BOOL allowNullOnOneSide = NO;
-BOOL compareJustFirstItemsOfArrays = NO;
-BOOL compareArrayItemsMutually = NO;
+BOOL compareArrayItemsWithFirstItem = NO;
 
 
 #define NSLog(FORMAT, ...) printf("%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
 
 void compareStructs(id firstStruct, id secondStruct, NSString* scope);
+
+
+NSString* getClassName(id structure)
+{
+    NSString* type = NSStringFromClass([structure class]);
+    
+    if ([type isEqualToString:@"__NSCFString"]) {
+        return @"string";
+    }
+    else if ([type isEqualToString:@"__NSCFConstantString"]) {
+        return @"string";
+    }
+    else if ([type isEqualToString:@"__NSCFNumber"]) {
+        return @"number";
+    }
+    else if ([type isEqualToString:@"__NSCFBoolean"]) {
+        return @"boolean";
+    }
+    else if ([type isEqualToString:@"__NSArrayI"]) {
+        return @"array";
+    }
+    else if ([type isEqualToString:@"__NSCFDictionary"]) {
+        return @"dictionary";
+    }
+    else if ([type isEqualToString:@"NSNull"]) {
+        return @"null";
+    }
+    else {
+        return @"unknown";
+    }
+}
 
 
 
@@ -87,7 +117,7 @@ void compareDicts(NSDictionary* firstDict, NSDictionary* secondDict, NSString* s
 
 void compareArrays(NSArray* firstArray, NSArray* secondArray, NSString* scope)
 {
-    if (!compareJustFirstItemsOfArrays) {
+    if (!compareArrayItemsWithFirstItem) {
         if ([firstArray count] != [secondArray count]) {
             NSLog(@"[!] %@: different item count", scope);
         }
@@ -98,35 +128,55 @@ void compareArrays(NSArray* firstArray, NSArray* secondArray, NSString* scope)
         }
     }
     else {
-        if ((([firstArray count] == 0) || ([secondArray count] == 0)) && allowEmptyArrayOnOneSide) return;
-        
-        compareStructs(firstArray[0], secondArray[0], [scope stringByAppendingString:@"0/"]);
-        
+        if (([firstArray count] == 0) && ([secondArray count] == 0)) {
+            return;
+        }
+        else if ([firstArray count] == 0) {
+            if (allowEmptyArrayOnOneSide) return;
+            NSLog(@"[<] %@: array is empty", scope);
+            return;
+        }
+        else if ([secondArray count] == 0) {
+            if (allowEmptyArrayOnOneSide) return;
+            NSLog(@"[>] %@: array is empty", scope);
+            return;
+        }
+        else {
+            for (NSInteger index = 0; index < [firstArray count]; index++) {
+                compareStructs(firstArray[index], secondArray[0], [scope stringByAppendingFormat:@"%ld/", (long)index]);
+            }
+        }
     }
 }
 
 
 void compareStructs(id firstStruct, id secondStruct, NSString* scope)
 {
-    if ([firstStruct isKindOfClass:[NSDictionary class]] && [secondStruct isKindOfClass:[NSDictionary class]]) {
+//    NSLog(@"[?] %@ [<]: %@, [>]: %@", scope, [firstStruct class], [secondStruct class]);
+    
+    NSString* firstClass = getClassName(firstStruct);
+    NSString* secondClass = getClassName(secondStruct);
+    
+    
+    if ([firstClass isEqualToString:@"dictionary"] && [secondClass isEqualToString:@"dictionary"]) {
         compareDicts(firstStruct, secondStruct, scope);
     }
-    else if ([firstStruct isKindOfClass:[NSArray class]] && [secondStruct isKindOfClass:[NSArray class]]) {
+    else if ([firstClass isEqualToString:@"array"] && [secondClass isEqualToString:@"array"]) {
         compareArrays(firstStruct, secondStruct, scope);
     }
-    else if ([firstStruct isKindOfClass:[NSString class]] && [secondStruct isKindOfClass:[NSString class]]) {
+    else if ([firstClass isEqualToString:@"string"] && [secondClass isEqualToString:@"string"]) {
         return;
     }
-    else if ([firstStruct isKindOfClass:[NSNumber class]] && [secondStruct isKindOfClass:[NSNumber class]]) {
+    else if ([firstClass isEqualToString:@"number"] && [secondClass isEqualToString:@"number"]) {
         return;
     }
-    else if ([firstStruct isKindOfClass:[NSNull class]] && [secondStruct isKindOfClass:[NSNull class]]) {
+    else if ([firstClass isEqualToString:@"null"] && [secondClass isEqualToString:@"null"]) {
         return;
     }
     else {
         
         if (allowNullOnOneSide) {
-            if ([firstStruct isKindOfClass:[NSNull class]] || [secondStruct isKindOfClass:[NSNull class]]) {
+            if ([firstClass isEqualToString:@"null"] || [secondClass isEqualToString:@"null"]) {
                 return;
             }
         }
@@ -135,7 +185,7 @@ void compareStructs(id firstStruct, id secondStruct, NSString* scope)
             scope = [scope substringToIndex:[scope length] - 1];
         }
         
-        NSLog(@"[!] %@: type mismatch - [<]: %@, [>]: %@", scope, [firstStruct class], [secondStruct class]);
+        NSLog(@"[!] %@: type mismatch - [<]: %@, [>]: %@", scope, firstClass, secondClass);
     }
 }
 
@@ -152,9 +202,7 @@ int main(int argc, const char * argv[])
             NSLog(@"    -n  allow null on one side");
             NSLog(@"    -a  allow empty array on one side");
             NSLog(@"    -d  allow empty dictionary on one side");
-            NSLog(@"    -f  compare just first items of arrays");
-            NSLog(@"    -m  compare array items mutually");
-            
+            NSLog(@"    -f  compare all array items of file1 with first array item of file2");
             return 0;
         }
         
@@ -175,10 +223,7 @@ int main(int argc, const char * argv[])
                 allowEmptyDictionaryOnOneSide = YES;
             }
             else if ([param isEqualTo:@"-f"]) {
-                compareJustFirstItemsOfArrays = YES;
-            }
-            else if ([param isEqualTo:@"-m"]) {
-                compareArrayItemsMutually = YES;
+                compareArrayItemsWithFirstItem = YES;
             }
             else {
                 if (files == 0) {
